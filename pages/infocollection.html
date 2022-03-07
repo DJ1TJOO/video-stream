@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos</title>
+    <script src="https://kit.fontawesome.com/9e67d94725.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/info/style.css">
+    <script src="/jquery.fittext.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark">
+        <a class="navbar-brand" href="/">Watch</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/movies">Movies</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/series">Series</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/collections">Collections</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <img id="left" src="/21.jpg">
+    <div id="right">
+        <p id="title" class="title">Pokemone the one adfadsf</p>
+        <p id="description">Ash's adventure begins when a powerful storm beaches him and his friends on Shamouti Island just as the islanders are preparing to cast the hero role in their annual festival. They offer it to Ash. It sounds like fun, so he accepts. The festival
+            enacts an ancient legend about three great and powerful Pokémon birds, Moltres, Zapdos and Articuno, who maintain nature's balance on the earth by ruling the elements of fire, lightning and ice.</p>
+        <a id="watch" class="btn cyan">Continue watching</a>
+    </div>
+    <div id="under" class="container">
+    </div>
+    </div>
+    <div class="row">
+        <script>
+            async function getData(id) {
+                return
+            }
+            var id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+            $.getJSON("/collections/info/" + id, async function(dataJson) {
+                var data = JSON.parse(dataJson);
+                //console.log(data);
+                var left = document.getElementById('left');
+                left.src = "/" + data.title + ".jpg";
+                var right = document.getElementById('right');
+                //console.log(left.clientWidth + " " + screen.width);
+                var under = document.getElementById('under');
+
+                //console.log(data.ids);
+                for (let i = 0; i < data.ids.length; i++) {
+                    const id = data.ids[i];
+                    await $.getJSON('/info/' + id, async data => {
+                        //console.log(data);
+                        const item = JSON.parse(data);
+                        var img = document.createElement("img");
+                        img.style.width = "100%";
+                        if (item.hasOwnProperty("episode")) {
+                            await $.getJSON('/series/' + item.id, series => {
+                                img.src = "/" + JSON.parse(series).title + ".jpg";
+                            });
+                        } else {
+                            img.src = "/" + item.title + ".jpg";
+                        }
+                        var title = document.createElement("p");
+                        var titleNode = document.createTextNode(item.title);
+                        title.appendChild(titleNode);
+                        title.className = "lead";
+                        title.style.float = "center";
+                        title.style.textAlign = "center";
+                        title.style.width = "100%";
+                        var pad15 = document.createElement("div");
+                        pad15.className = "pad15";
+                        pad15.style.overflow = "hidden";
+                        pad15.appendChild(title);
+                        pad15.appendChild(img);
+                        var item2 = document.createElement("div");
+                        item2.className = "item2";
+                        item2.appendChild(pad15);
+                        var a = document.createElement("a");
+                        if (item.type === "series")
+                            a.href = "/info/series/" + item.id;
+                        else if (item.type === "video")
+                            a.href = "/watch/" + item.id;
+                        else if (item.type === "collection")
+                            a.href = "/info/collection/" + item.id;
+
+                        a.className = "item";
+                        a.appendChild(item2);
+                        under.appendChild(a);
+                    });
+                }
+
+                var title = document.getElementById('title');
+                title.innerText = data.title;
+                var description = document.getElementById('description');
+                description.innerText = data.description;
+
+                var watch = document.getElementById('watch');
+                console.log(data);
+                if (data.hasOwnProperty("latestWatchedVideo") && data.latestWatchedVideo != null && data.latestWatchedTime.toString() !== "0000-00-00T00:00:00.000Z") {
+                    console.log(data.latestWatchedVideo);
+                    watch.href = "/watch/" + data.latestWatchedVideo;
+                } else {
+                    watch.parentNode.removeChild(watch);
+                }
+
+                setTimeout(() => {
+                    if (screen.width > 768) {
+                        right.style.width = "calc(100vw - 20px - " + left.clientWidth + "px)";
+                    } else {
+                        right.style.width = "";
+                    }
+                    window.addEventListener("resize", () => {
+                        if (screen.width > 768) {
+                            right.style.width = "calc(100vw - 20px - " + left.clientWidth + "px)";
+                        } else {
+                            right.style.width = "";
+                        }
+                    });
+                }, 100);
+            });
+        </script>
+    </div>
+    </div>
+    <script src="/info/index.js"></script>
+</body>
+
+</html>

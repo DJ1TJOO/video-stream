@@ -1,0 +1,322 @@
+body {
+    margin: 0;
+    background-color: #000;
+    overflow: scroll;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.video {
+    width: 100%;
+    height: 100%;
+}
+
+button {
+    background: none;
+    display: inline-block;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+}
+
+.c-video {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.c-video:hover .controls-bar {
+    transform: translateY(0);
+}
+
+.c-video:hover .top {
+    transform: translateY(0);
+}
+
+.center {
+    display: flex;
+    position: absolute;
+    top: 52px;
+    width: 100%;
+    height: calc(100% - 62px - 64px - 60px);
+    flex-wrap: wrap;
+    z-index: 1000;
+}
+
+.center .overlay {
+    position: relative;
+    padding: 10px;
+    width: 50px;
+    margin: auto;
+}
+
+.center .overlay div {
+    background: none;
+    display: inline-block;
+    border: 0;
+    outline: 0;
+    margin-left: -25px;
+    margin-top: 31px;
+}
+
+.center .overlay div#action {
+    font-family: "Font Awesome 5 Free";
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    width: 50px;
+    height: 50px;
+    font-size: 48px;
+    color: rgba(255, 255, 255, 0);
+    font-weight: 900;
+    transition: 0.3s ease-in-out;
+}
+
+.top {
+    display: flex;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    flex-wrap: wrap;
+    background-color: rgba(0, 0, 0, 0.7);
+    transform: translateY(-100%);
+    transition: 0.5s ease-in-out;
+}
+
+.top .buttons {
+    position: relative;
+    padding: 10px;
+    width: 100%;
+    left: 0;
+}
+
+.top .buttons button#back:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f053";
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    width: 30px;
+    height: 30px;
+    font-size: 28px;
+    color: cadetblue;
+    font-weight: 900;
+}
+
+.top .buttons button#title {
+    display: inline-block;
+    font-size: 28px;
+    color: cadetblue;
+}
+
+.controls-bar {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    flex-wrap: wrap;
+    background-color: rgba(0, 0, 0, 0.7);
+    transform: translateY(100%);
+    transition: 0.5s ease-in-out;
+}
+
+.controls-bar .buttons {
+    position: relative;
+    padding: 10px;
+    width: 155px;
+    margin: auto;
+}
+
+.controls-bar .buttons button#skip-forward:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f2f9";
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    width: 30px;
+    height: 30px;
+    font-size: 28px;
+    color: cadetblue;
+    font-weight: 900;
+}
+
+.controls-bar .buttons button#skip-backward:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f2ea";
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    width: 30px;
+    height: 30px;
+    font-size: 28px;
+    color: cadetblue;
+    font-weight: 900;
+}
+
+.controls-bar .buttons button#skip-backward:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f2ea";
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    width: 30px;
+    height: 30px;
+    font-size: 28px;
+    color: cadetblue;
+    font-weight: 900;
+}
+
+.controls-bar .buttons button#play-pause:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f04c";
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    width: 30px;
+    height: 30px;
+    font-size: 28px;
+    color: cadetblue;
+    font-weight: 900;
+}
+
+.controls-bar .buttons button#play-pause.play:before {
+    content: "\f04b";
+}
+
+.controls-bar .buttons button#play-pause.pause:before {
+    content: "\f04c";
+}
+
+.controls-bar button#volume {
+    background: none;
+    display: inline-block;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    text-align: right;
+}
+
+.controls-bar button#volume:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f028";
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    width: 30px;
+    height: 30px;
+    font-size: 28px;
+    color: cadetblue;
+    font-weight: 900;
+}
+
+.controls-bar button#volume.mute:before {
+    content: "\f6a9";
+}
+
+.controls-bar button#volume.down:before {
+    content: "\f026";
+}
+
+.controls-bar button#volume.volume:before {
+    content: "\f027";
+}
+
+.controls-bar button#volume.up:before {
+    content: "\f028";
+}
+
+.controls-bar button#fullscreen {
+    background: none;
+    display: inline-block;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    text-align: right;
+}
+
+.controls-bar button#fullscreen:before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f065";
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    width: 30px;
+    height: 30px;
+    font-size: 28px;
+    color: cadetblue;
+    font-weight: 900;
+}
+
+.controls-bar button#fullscreen.full:before {
+    content: "\f065";
+}
+
+.controls-bar button#fullscreen.small:before {
+    content: "\f066";
+}
+
+.controls-bar button#time {
+    background: none;
+    display: inline-block;
+    border: 0;
+    outline: 0;
+    cursor: default;
+    text-align: left;
+    font-size: 28px;
+    color: cadetblue;
+    font-weight: 900;
+}
+
+.controls-bar .loading-bar {
+    height: 10px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    cursor: pointer;
+    background-color: cadetblue;
+}
+
+.controls-bar .loading-bar-thumb {
+    height: 10px;
+    transition: 0.3s linear;
+    background-color: darkcyan;
+    width: 0px;
+}
+
+.controls-bar .volume-slider-background {
+    z-index: 1001;
+    display: none;
+    position: absolute;
+    bottom: 50px;
+    right: 47px;
+    width: 30px;
+    height: 90px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 5px;
+}
+
+.controls-bar .volume-slider {
+    position: absolute;
+    width: 10px;
+    height: 70px;
+    background-color: cadetblue;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.controls-bar .volume-slider-thumb {
+    bottom: 0;
+    position: absolute;
+    height: 0px;
+    transition: 0.3s linear;
+    background-color: darkcyan;
+    width: 10px;
+    border-radius: 2px;
+}
+
+.controls-bar .controls-right {
+    position: relative;
+    right: 0;
+    padding: 10px 0;
+    width: 260px;
+}
+
+.controls-bar .controls-right > button {
+    float: right;
+}

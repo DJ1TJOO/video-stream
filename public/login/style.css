@@ -1,0 +1,77 @@
+.form {
+    position: absolute;
+    width: 70%;
+    height: 285px;
+    left: calc(50vw - 35%);
+    top: calc(50vh - 142px);
+    margin-top: -40px;
+}
+
+.title {
+    color: white;
+    line-height: 70px;
+}
+
+.label {
+    color: white;
+}
+
+.cyan {
+    color: white;
+    background-color: darkcyan;
+}
+
+.cyan:hover {
+    color: darkcyan;
+    background-color: #fefefe;
+}
+
+
+/* Extra small devices (phones, 600px and down) */
+
+@media only screen and (max-width: 600px) {
+    .form {
+        width: 80%;
+        left: calc(50vw - 40%);
+    }
+}
+
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+
+@media only screen and (min-width: 600px) {
+    .form {
+        width: 70%;
+        left: calc(50vw - 35%);
+    }
+}
+
+
+/* Medium devices (landscape tablets, 768px and up) */
+
+@media only screen and (min-width: 768px) {
+    .form {
+        width: 50%;
+        left: calc(50vw - 25%);
+    }
+}
+
+
+/* Large devices (laptops/desktops, 992px and up) */
+
+@media only screen and (min-width: 992px) {
+    .form {
+        width: 30%;
+        left: calc(50vw - 15%);
+    }
+}
+
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+
+@media only screen and (min-width: 1200px) {
+    .form {
+        width: 24%;
+        left: calc(50vw - 12%);
+    }
+}

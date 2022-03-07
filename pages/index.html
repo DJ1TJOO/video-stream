@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos</title>
+    <script src="https://kit.fontawesome.com/9e67d94725.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/index/style.css">
+    <script src="/jquery.fittext.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark">
+        <a class="navbar-brand" href="/">Watch</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/movies">Movies</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/series">Series</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/collections">Collections</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" id="new_on_watch">
+        <h3 style="color: white;padding: 10px; margin-left: 12px; margin-bottom: -20px;">New on Watch</h3>
+        <script>
+            $.getJSON("/videos/all", function(videosJson) {
+                var videos = JSON.parse(videosJson);
+                $.getJSON("/series/all", function(seriesJson) {
+                    var series = JSON.parse(seriesJson);
+                    $.getJSON("/collections/all", function(collectionsJson) {
+                        var collections = JSON.parse(collectionsJson);
+                        var items = series.concat(videos, collections);
+
+                        function compare(a, b) {
+                            if (a.added < b.added) {
+                                return 1;
+                            }
+                            if (a.added > b.added) {
+                                return -1;
+                            }
+                            return 0;
+                        }
+
+                        items.sort(compare);
+                        items = items.slice(0, 17);
+
+                        var carousel = document.createElement("div");
+                        carousel.setAttribute("data-items", "1,2,2,3");
+                        carousel.setAttribute("data-slide", "1");
+                        carousel.setAttribute("data-interval", "1000");
+                        carousel.id = "MultiCarousel";
+                        carousel.className = "MultiCarousel";
+                        document.getElementById('new_on_watch').appendChild(carousel);
+
+                        var carouselInner = document.createElement("div");
+                        carouselInner.id = "MultiCarousel-inner";
+                        carouselInner.className = "MultiCarousel-inner";
+                        carousel.appendChild(carouselInner);
+
+                        for (let i = 0; i < items.length; i++) {
+                            const item = items[i];
+                            var title = document.createElement("p");
+                            var titleNode = document.createTextNode(item.title);
+                            title.appendChild(titleNode);
+                            title.className = "lead";
+                            title.style.float = "center";
+                            title.style.textAlign = "center";
+                            title.style.width = "100%";
+                            var img = document.createElement("img");
+                            img.src = item.title + ".jpg";
+                            img.style.width = "100%";
+                            var pad15 = document.createElement("div");
+                            pad15.className = "pad15";
+                            pad15.style.overflow = "hidden";
+                            pad15.appendChild(title);
+                            pad15.appendChild(img);
+                            var item2 = document.createElement("div");
+                            item2.className = "item2";
+                            item2.appendChild(pad15);
+                            var a = document.createElement("a");
+                            if (item.type === "series")
+                                a.href = "/info/series/" + item.id;
+                            else if (item.type === "video")
+                                a.href = "/info/video/" + item.id;
+                            else if (item.type === "collection")
+                                a.href = "/info/collection/" + item.id;
+
+                            a.style.display = "block";
+                            a.appendChild(item2);
+                            carouselInner.appendChild(a);
+                        }
+
+                        if (items.length < 4) {
+                            for (let j = 0; j < 3 - items.length; j++) {
+                                var emptyItemA = document.createElement("a");
+                                emptyItemA.style.display = "block";
+
+                                var emptyItem = document.createElement("div");
+                                emptyItem.className = "item2";
+                                emptyItemA.appendChild(emptyItem);
+
+                                var emptyItemPad15 = document.createElement("div");
+                                emptyItemPad15.className = "pad15";
+                                emptyItemPad15.style.overflow = "hidden";
+                                emptyItemPad15.style.display = "none";
+                                emptyItem.appendChild(emptyItemPad15);
+                                document.getElementById('MultiCarousel-inner').appendChild(emptyItemA);
+                            }
+                        }
+
+                        var leftLst = document.createElement("button");
+                        leftLst.className = "btn leftLst";
+
+                        var arrowLeft = document.createElement("i");
+                        arrowLeft.className = "fas fa-arrow-left";
+                        leftLst.appendChild(arrowLeft);
+                        carousel.appendChild(leftLst);
+
+                        var rightLst = document.createElement("button");
+                        rightLst.className = "btn rightLst";
+
+                        var arrowRight = document.createElement("i");
+                        arrowRight.className = "fas fa-arrow-right";
+                        rightLst.appendChild(arrowRight);
+                        carousel.appendChild(rightLst);
+                        watch = true;
+                        load();
+                    });
+                });
+            });
+        </script>
+    </div>
+    <div class="container" id="continue_watching">
+        <h3 style="color: white;padding: 10px; margin-left: 12px; margin-bottom: -20px;">Continue watching</h3>
+        <script>
+            $.getJSON("/videos/all", function(videosJson) {
+                var videos = JSON.parse(videosJson);
+                $.getJSON("/series/all", function(seriesJson) {
+                    var series = JSON.parse(seriesJson);
+                    $.getJSON("/collections/all", function(collectionsJson) {
+                        var collections = JSON.parse(collectionsJson);
+                        var items = series.concat(videos, collections);
+
+                        function compare(a, b) {
+                            if (a.latestWatchedTime < b.latestWatchedTime) {
+                                return 1;
+                            }
+                            if (a.latestWatchedTime > b.latestWatchedTime) {
+                                return -1;
+                            }
+                            return 0;
+                        }
+                        var itemsToRemove = [];
+                        for (let j = 0; j < items.length; j++) {
+                            const item = items[j];
+                            if (item.latestWatchedTime.toString() === "0000-00-00T00:00:00.000Z") {
+                                itemsToRemove.push(item);
+                            }
+                        }
+                        items = items.filter((item) => !itemsToRemove.includes(item));
+                        items.sort(compare);
+                        items = items.slice(0, 17);
+
+                        var carousel = document.createElement("div");
+                        carousel.setAttribute("data-items", "1,2,2,3");
+                        carousel.setAttribute("data-slide", "1");
+                        carousel.setAttribute("data-interval", "1000");
+                        carousel.id = "MultiCarousel";
+                        carousel.className = "MultiCarousel";
+                        document.getElementById('continue_watching').appendChild(carousel);
+
+                        var carouselInner = document.createElement("div");
+                        carouselInner.id = "MultiCarousel-inner";
+                        carouselInner.className = "MultiCarousel-inner";
+                        carousel.appendChild(carouselInner);
+
+                        for (let i = 0; i < items.length; i++) {
+                            const item = items[i];
+                            var title = document.createElement("p");
+                            var titleNode = document.createTextNode(item.title);
+                            title.appendChild(titleNode);
+                            title.className = "lead";
+                            title.style.float = "center";
+                            title.style.textAlign = "center";
+                            title.style.width = "100%";
+                            var imgDiv = document.createElement("div");
+                            var loadingBar = document.createElement("div");
+                            loadingBar.className = "loading-bar";
+                            var loadingBarThumb = document.createElement("div");
+                            loadingBarThumb.className = "loading-bar-thumb";
+                            if (item.type === "video") {
+                                loadingBarThumb.style.width = item.time / item.duration * 100 + "%";
+                            } else {
+                                loadingBarThumb.style.width = item.latestWatchTime / item.latestWatchDuration * 100 + "%";
+                            }
+                            loadingBar.appendChild(loadingBarThumb);
+                            var img = document.createElement("img");
+                            img.src = item.title + ".jpg";
+                            img.style.width = "100%";
+                            imgDiv.appendChild(img);
+                            imgDiv.appendChild(loadingBar);
+                            var pad15 = document.createElement("div");
+                            pad15.className = "pad15";
+                            pad15.style.overflow = "hidden";
+                            pad15.appendChild(title);
+                            pad15.appendChild(imgDiv);
+                            var item2 = document.createElement("div");
+                            item2.className = "item2";
+                            item2.appendChild(pad15);
+                            var a = document.createElement("a");
+                            if (item.type === "series")
+                                a.href = "/info/series/" + item.id;
+                            else if (item.type === "video")
+                                a.href = "/info/video/" + item.id;
+                            else if (item.type === "collection")
+                                a.href = "/info/collection/" + item.id;
+
+                            a.style.display = "block";
+                            a.appendChild(item2);
+                            carouselInner.appendChild(a);
+                        }
+
+                        if (items.length < 4) {
+                            for (let j = 0; j < 3 - items.length; j++) {
+                                var emptyItemA = document.createElement("a");
+                                emptyItemA.style.display = "block";
+
+                                var emptyItem = document.createElement("div");
+                                emptyItem.className = "item2";
+                                emptyItemA.appendChild(emptyItem);
+
+                                var emptyItemPad15 = document.createElement("div");
+                                emptyItemPad15.className = "pad15";
+                                emptyItemPad15.style.overflow = "hidden";
+                                emptyItemPad15.style.display = "none";
+                                emptyItem.appendChild(emptyItemPad15);
+                                document.getElementById('MultiCarousel-inner').appendChild(emptyItemA);
+                            }
+                        }
+
+                        var leftLst = document.createElement("button");
+                        leftLst.className = "btn leftLst";
+
+                        var arrowLeft = document.createElement("i");
+                        arrowLeft.className = "fas fa-arrow-left";
+                        leftLst.appendChild(arrowLeft);
+                        carousel.appendChild(leftLst);
+
+                        var rightLst = document.createElement("button");
+                        rightLst.className = "btn rightLst";
+
+                        var arrowRight = document.createElement("i");
+                        arrowRight.className = "fas fa-arrow-right";
+                        rightLst.appendChild(arrowRight);
+                        carousel.appendChild(rightLst);
+                        watching = true;
+                        load();
+                    });
+                });
+            });
+        </script>
+    </div>
+    <div class="container">
+        <h3 style="color: white;padding: 10px; margin-left: 12px; margin-bottom: -20px;">All A-Z</h3>
+        <div id="all_a-z">
+        </div>
+        <script>
+            $.getJSON("/videos/all ", function(videosJson) {
+                var videos = JSON.parse(videosJson);
+                $.getJSON("/series/all ", function(seriesJson) {
+                    var series = JSON.parse(seriesJson);
+                    $.getJSON("/collections/all ", function(collectionsJson) {
+                        var collections = JSON.parse(collectionsJson);
+                        var items = series.concat(videos, collections);
+
+                        function compare(a, b) {
+                            if (a.title < b.title) {
+                                return -1;
+                            }
+                            if (a.title > b.title) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+
+                        items.sort(compare);
+
+                        for (let i = 0; i < items.length; i++) {
+                            const item = items[i];
+                            var title = document.createElement("p");
+                            var titleNode = document.createTextNode(item.title);
+                            title.appendChild(titleNode);
+                            title.className = "lead";
+                            title.style.float = "center";
+                            title.style.textAlign = "center";
+                            title.style.width = "100%";
+                            var img = document.createElement("img");
+                            img.src = item.title + ".jpg";
+                            img.style.width = "100%";
+                            var pad15 = document.createElement("div");
+                            pad15.className = "pad15";
+                            pad15.style.overflow = "hidden";
+                            pad15.appendChild(title);
+                            pad15.appendChild(img);
+                            var item2 = document.createElement("div");
+                            item2.className = "item2";
+                            item2.appendChild(pad15);
+                            var a = document.createElement("a");
+                            if (item.type === "series")
+                                a.href = "/info/series/" + item.id;
+                            else if (item.type === "video")
+                                a.href = "/info/video/" + item.id;
+                            else if (item.type === "collection")
+                                a.href = "/info/collection/" + item.id;
+
+                            a.className = "item";
+                            a.appendChild(item2);
+                            document.getElementById('all_a-z').appendChild(a);
+                            all = true;
+                            load();
+                        }
+                    });
+                });
+            });
+        </script>
+    </div>
+    <script src="/index/index.js "></script>
+</body>
+
+</html>

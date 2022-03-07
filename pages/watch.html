@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <title>Video stream sample</title>
+    <script src="https://kit.fontawesome.com/9e67d94725.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/watch/style.css">
+</head>
+
+<body>
+    <div class="c-video">
+        <video class="video" autoplay="true" webkit-playsinline> 
+        </video>
+        <div class="controls">
+            <div id="top" class="top">
+                <div class="buttons">
+                    <button id="back"></button>
+                    <button id="title">Title dafa d</button>
+                </div>
+            </div>
+            <div class="controls-bar">
+                <div class="loading-bar">
+                    <div class="loading-bar-thumb"></div>
+                </div>
+                <button id="time">22:13/24:21</button>
+                <div class="buttons">
+                    <button id="skip-backward"></button>
+                    <button id="play-pause"></button>
+                    <button id="skip-forward"></button>
+                </div>
+                <div id="volume-slider-background" class="volume-slider-background" style="display: none;">
+                    <div class="volume-slider">
+                        <div class="volume-slider-thumb"></div>
+                    </div>
+                </div>
+                <div class="controls-right">
+                    <button id="fullscreen"></button>
+                    <button id="volume"></button>
+                </div>
+            </div>
+            <div id="center" class="center">
+                <div class="overlay">
+                    <div id="action"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/watch/index.js"></script>
+</body>
+
+</html>
